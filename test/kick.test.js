@@ -209,6 +209,36 @@ describe("kick controller", () => {
     assert.strictEqual(kicks, 0, "stationary overlap must not keep launching the pet");
   });
 
+
+  it("a gate closing mid-flight drops the pet to the floor instead of freezing it in the air", () => {
+    let imeActive = false;
+    let clock = 1000;
+    let petBounds = { x: 400, y: 800, width: 120, height: 120 };
+    const rects = [{ left: 300, top: 820, right: 420, bottom: 920 }];
+    const probe = Object.assign(() => { const r = rects.shift(); return r ? { id: "w", rect: r } : null; }, { supported: true });
+    const kick = initKick({
+      now: () => clock,
+      random: () => 0.5,
+      setTimeout: () => 0,
+      clearTimeout: () => {},
+      win: { isDestroyed: () => false, isVisible: () => true },
+      probe,
+      isImeEditingActive: () => imeActive,
+      getPetWindowBounds: () => ({ ...petBounds }),
+      applyPetWindowBounds: (b) => { petBounds = { ...b }; },
+      clampToScreenVisual: (x, y, w, h) => ({ x, y: Math.max(0, Math.min(y, 1000 - h)) }),
+    });
+    kick.setEnabled(true);
+    kick._step();
+    for (let i = 0; i < 12; i += 1) { clock += 16; kick._step(); }
+    assert.ok(petBounds.y < 800 - 50, "pet should be airborne before the gate closes");
+    imeActive = true;
+    clock += 16;
+    kick._step();
+    assert.strictEqual(kick.isAnimating(), false);
+    assert.strictEqual(petBounds.y, 1000 - 120, "pet must land on the floor");
+  });
+
   it("does nothing while the user is dragging the pet itself", () => {
     const kick = initKick({
       now: () => 1000,

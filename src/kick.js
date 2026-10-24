@@ -245,9 +245,32 @@ module.exports = function initKick(ctx) {
     }
   }
 
+  // Gates where something else owns the pet window's position right now.
+  const NO_DROP_REASONS = new Set([
+    "gate:no-window",
+    "gate:pet-drag-locked",
+    "gate:mini-mode",
+    "gate:mini-transition",
+  ]);
+
+  // A flight cut short (IME, size preview, hidden pet, setting turned off) must
+  // not leave the pet frozen mid-air: put it on the floor under it first.
+  function dropToFloor() {
+    try {
+      const floor = ctx.clampToScreenVisual(body.x, 1e6, size.width, size.height);
+      if (floor && Number.isFinite(floor.y) && floor.y > body.y) {
+        body.y = floor.y;
+        applyBounds();
+      }
+    } catch (err) {
+      if (typeof ctx.onError === "function") ctx.onError(err);
+    }
+  }
+
   function finish(reason) {
     if (!active) return;
     debug(`finish: ${reason || "landed-or-stopped"}`);
+    if (body && size && !NO_DROP_REASONS.has(reason)) dropToFloor();
     active = false;
     body = null;
     wasOverlapping = false;
