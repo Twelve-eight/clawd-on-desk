@@ -147,16 +147,17 @@ module.exports = function initKick(ctx) {
     if (typeof ctx.debugLog === "function") ctx.debugLog(message);
   }
 
-  function gateOpen() {
+  // Returns why the kick loop must stand down right now, or null when it may run.
+  function closedReason() {
     const win = ctx.win;
-    if (!win || win.isDestroyed()) return false;
-    if (typeof win.isVisible === "function" && !win.isVisible()) return false;
-    if (ctx.dragLocked) return false;
-    if (ctx.getMiniMode && ctx.getMiniMode()) return false;
-    if (ctx.miniTransitioning) return false;
-    if (typeof ctx.isSizePreviewActive === "function" && ctx.isSizePreviewActive()) return false;
-    if (typeof ctx.isImeEditingActive === "function" && ctx.isImeEditingActive()) return false;
-    return true;
+    if (!win || win.isDestroyed()) return "no-window";
+    if (typeof win.isVisible === "function" && !win.isVisible()) return "pet-hidden";
+    if (ctx.dragLocked) return "pet-drag-locked";
+    if (ctx.getMiniMode && ctx.getMiniMode()) return "mini-mode";
+    if (ctx.miniTransitioning) return "mini-transition";
+    if (typeof ctx.isSizePreviewActive === "function" && ctx.isSizePreviewActive()) return "size-preview";
+    if (typeof ctx.isImeEditingActive === "function" && ctx.isImeEditingActive()) return "ime-editing";
+    return null;
   }
 
   // Latest dragged-window rect in DIPs with a smoothed velocity, or null.
@@ -190,6 +191,7 @@ module.exports = function initKick(ctx) {
       }
     } else {
       tracker = { id: raw.id, rect, at, vx: 0, vy: 0 };
+      debug(`dragged window seen id=${raw.id} rect=${rect.left},${rect.top},${rect.right},${rect.bottom}`);
     }
     return tracker;
   }
@@ -243,8 +245,9 @@ module.exports = function initKick(ctx) {
     }
   }
 
-  function finish() {
+  function finish(reason) {
     if (!active) return;
+    debug(`finish: ${reason || "landed-or-stopped"}`);
     active = false;
     body = null;
     wasOverlapping = false;
@@ -265,9 +268,10 @@ module.exports = function initKick(ctx) {
 
   function step() {
     const at = now();
-    if (!gateOpen()) {
+    const closed = closedReason();
+    if (closed) {
       tracker = null;
-      finish();
+      finish(`gate:${closed}`);
       return;
     }
     const sample = sampleWindow(at);
@@ -327,7 +331,7 @@ module.exports = function initKick(ctx) {
     if (onFloor && Math.abs(body.vx) < SETTLE_VX) {
       if (!restingSince) restingSince = at;
       if (at - restingSince >= SETTLE_MS && !sample) {
-        finish();
+        finish("landed");
         return;
       }
     } else {
@@ -342,7 +346,7 @@ module.exports = function initKick(ctx) {
       step();
     } catch (err) {
       if (typeof ctx.onError === "function") ctx.onError(err);
-      finish();
+      finish("exception");
     }
     if (enabled) timer = setTimer(loop, active ? FRAME_MS : SCAN_MS);
   }
@@ -357,14 +361,14 @@ module.exports = function initKick(ctx) {
       if (timer) clearTimer(timer);
       timer = null;
       tracker = null;
-      finish();
+      finish("disabled");
     }
   }
 
   return {
     setEnabled,
     isAnimating: () => active,
-    stop: () => finish(),
+    stop: () => finish("stop"),
     get enabled() {
       return enabled;
     },
