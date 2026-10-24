@@ -129,7 +129,7 @@ function hasOmpCommand(options = {}) {
   if (nodeBin && nodeBin !== "node") {
     const nodeDir = path.dirname(nodeBin);
     const candidates = platform === "win32"
-      ? ["omp.cmd", "omp.exe", "omp.ps1"]
+      ? ["omp.cmd", "omp.exe", "omp.ps1", "omp-zh.exe"]
       : ["omp"];
     if (candidates.some((name) => executableExists(path.join(nodeDir, name), platform, accessSync))) {
       return true;
@@ -137,7 +137,8 @@ function hasOmpCommand(options = {}) {
   }
 
   if (platform === "win32") {
-    return commandExists("where", ["omp"], { execFileSync });
+    return commandExists("where", ["omp"], { execFileSync })
+      || commandExists("where", ["omp-zh"], { execFileSync });
   }
 
   for (const shell of ["/bin/zsh", "/bin/bash"]) {

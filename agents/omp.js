@@ -6,10 +6,10 @@
 module.exports = {
   id: "omp",
   name: "OMP",
-  processNames: { win: ["omp.exe"], mac: ["omp"], linux: ["omp"] },
+  processNames: { win: ["omp.exe", "omp-zh.exe"], mac: ["omp"], linux: ["omp"] },
   // A bare `omp` process name is ambiguous on POSIX; package-path matching in
   // state.js covers the known CLI distribution there.
-  startupRecoveryProcessNames: { win: ["omp.exe"], mac: [], linux: [] },
+  startupRecoveryProcessNames: { win: ["omp.exe", "omp-zh.exe"], mac: [], linux: [] },
   eventSource: "extension",
   // Clawd-internal event names. hooks/omp-extension-core.js translates OMP's
   // native snake_case events to this shared PascalCase event vocabulary.

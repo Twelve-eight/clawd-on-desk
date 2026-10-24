@@ -242,6 +242,7 @@ if (isWin) {
 // Best-effort; degrades to "never fullscreen" if koffi/user32 is unavailable,
 // so a broken probe can never hide the pet.
 const { createForegroundFullscreenProbe } = require("./win-fullscreen-detect");
+const { createMovingWindowProbe } = require("./win-moving-window");
 const _isForegroundFullscreen = createForegroundFullscreenProbe({
   isWin,
   onError: (err) => console.warn("Clawd: win-fullscreen-detect not available:", err && err.message),
@@ -1210,7 +1211,7 @@ const petWindowRuntime = createPetWindowRuntime({
   // Issue #690 plan §4.3.10's fourth reconcile protection period (lazy-bound
   // like isMiniAnimating above — _roam is constructed after petWindowRuntime,
   // but this closure isn't invoked until well after module load finishes).
-  isRoamAnimating: () => _roam.isRoamAnimating(),
+  isRoamAnimating: () => _roam.isRoamAnimating() || _kick.isAnimating(),
   isNearWorkAreaEdge: (bounds) => isNearWorkAreaEdge(bounds),
   flushRuntimeStateToPrefs: () => flushRuntimeStateToPrefs(),
   handleMiniDisplayChange: () => _mini.handleDisplayChange(),
@@ -4789,6 +4790,7 @@ const SETTINGS_MIRROR_SETTERS = {
     }
   },
   freeRoam: (v) => { _roam.setEnabled(v); },
+  kickByWindow: (v) => { _kick.setEnabled(v); },
   textScale: (v) => { textScale = v; textScalePreview = null; },
   textScaleByDisplay: (v) => { textScaleByDisplay = v; textScalePreview = null; },
 };
@@ -5707,6 +5709,7 @@ const { enterMiniMode, exitMiniMode, enterMiniViaMenu, miniPeekIn, miniPeekOut,
 
 // ── Free Roam — initialized here after state and mini modules ──
 const _roamCtx = {
+  isKickActive: () => _kick.isAnimating(),
   hasActiveSessions: anySessionInProgress,
   resolveDisplayState,
   get win() { return win; },
@@ -5780,6 +5783,49 @@ try {
   });
 } catch (err) {
   console.warn("Clawd: freeRoam subscribeKey failed:", err && err.message);
+}
+
+// Keepy-uppy: a window dragged into the pet kicks it (Windows only).
+const _kick = require("./kick")({
+  get win() { return win; },
+  get dragLocked() { return petWindowRuntime.isDragLocked(); },
+  probe: createMovingWindowProbe({
+    onError: (err) => console.warn("Clawd: win-moving-window not available:", err && err.message),
+  }),
+  screenToDipRect: (r) => {
+    try {
+      const d = screen.screenToDipRect(null, { x: r.left, y: r.top, width: r.right - r.left, height: r.bottom - r.top });
+      return { left: d.x, top: d.y, right: d.x + d.width, bottom: d.y + d.height };
+    } catch { return null; }
+  },
+  getPetWindowBounds,
+  applyPetWindowBounds,
+  getEffectiveCurrentPixelSize,
+  getHitRectScreen,
+  clampToScreenVisual,
+  syncHitWin: () => syncHitWin(),
+  releaseReconcileProtection: () => petWindowRuntime.releaseReconcileProtection(),
+  repositionAnchoredSurfaces: () => repositionAnchoredFloatingSurfaces(),
+  repositionBubbles: () => repositionFloatingBubbles(),
+  get bubbleFollowPet() { return bubbleFollowPet; },
+  get pendingPermissions() { return pendingPermissions; },
+  getMiniMode: () => _mini.getMiniMode(),
+  get miniTransitioning() { return _mini.getMiniTransitioning(); },
+  getCurrentState: () => _state.getCurrentState(),
+  resolveDisplayState,
+  applyState: (state, svgOverride, opts) => _state.applyState(state, svgOverride, opts),
+  setState: (state, svgOverride, opts) => _state.setState(state, svgOverride, opts),
+  cancelRoam: () => _roam.cancelRoam(),
+  isSizePreviewActive: () => petWindowRuntime.isSettingsSizePreviewActive(),
+  isImeEditingActive: () => _roamCtx.isImeEditingActive(),
+  onError: (err) => console.warn("Clawd: kick step failed:", err && err.message),
+  debugLog: process.env.CLAWD_KICK_DEBUG === "1" ? (msg) => console.log("Clawd kick:", msg) : undefined,
+});
+_kick.setEnabled(_settingsController.get("kickByWindow") === true);
+try {
+  _settingsController.subscribeKey("kickByWindow", (value) => _kick.setEnabled(value === true));
+} catch (err) {
+  console.warn("Clawd: kickByWindow subscribeKey failed:", err && err.message);
 }
 
 // Convenience getters for mini state (used throughout main.js)

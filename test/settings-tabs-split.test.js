@@ -58,6 +58,8 @@ const FROZEN_KEYS = [
   "disableMiniMode",
   "freeRoam",
   "roamConstrainAxis",
+
+  "kickByWindow",
   "keepSizeAcrossDisplays",
   "fullscreenAutoHide",
   "openAtLogin",
@@ -92,6 +94,8 @@ const EXPECTED_KEYS = {
     "disableMiniMode",
     "freeRoam",
     "roamConstrainAxis",
+
+    "kickByWindow",
     "fullscreenAutoHide",
   ],
   notifications: [
@@ -428,6 +432,8 @@ function makeSnapshot(overrides = {}) {
     disableMiniMode: false,
     freeRoam: false,
     roamConstrainAxis: false,
+
+    kickByWindow: false,
     testReactionsEnabled: false,
     fullscreenAutoHide: false,
     soundMuted: false,
@@ -713,7 +719,7 @@ describe("settings tab split", () => {
     assert.deepStrictEqual(sectionTitles(pet), ["大小", "走动与位置", "反应"]);
     assert.deepStrictEqual(sectionRowLabels(pet), [
       ["大小", "跨显示器保持大小"],
-      ["自由漫步", "移动方式", "活动范围", "允许贴靠屏幕边缘", "关闭极简模式", "全屏时自动隐藏"],
+      ["自由漫步", "移动方式", "活动范围", "允许贴靠屏幕边缘", "关闭极简模式", "窗口踢毽子", "全屏时自动隐藏"],
       ["测试结果动画"],
     ]);
 

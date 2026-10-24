@@ -577,6 +577,7 @@ const updateRegistry = {
   disableMiniMode: requireBoolean("disableMiniMode"),
   freeRoam: requireBoolean("freeRoam"),
   roamConstrainAxis: requireBoolean("roamConstrainAxis"),
+  kickByWindow: requireBoolean("kickByWindow"),
   keepSizeAcrossDisplays: {
     validate: requireBoolean("keepSizeAcrossDisplays"),
     effect(value, deps = {}) {

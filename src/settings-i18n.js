@@ -931,6 +931,10 @@
       rowAllowEdgePinningDesc: "Top/bottom decorations (sparkles, buildings, bubbles, …) may be clipped by the screen edge",
       rowDisableMiniMode: "Disable mini mode",
       rowDisableMiniModeDesc: "Prevent Clawd from entering mini mode from edge snap or the menu",
+
+      rowKickByWindow: "Kick by dragged windows",
+
+      rowKickByWindowDesc: "Drag another app's window into Clawd to kick it up like a hacky sack. Keep hitting it to keep it in the air. Windows only.",
       rowFreeRoam: "Free roam",
       rowFreeRoamDesc: "Let Clawd wander freely around the desk when idle. Movement stops when you move the mouse.",
       rowRoamMovementStyle: "Movement style",
@@ -2141,6 +2145,10 @@
       rowAllowEdgePinningDesc: "开启后桌宠贴屏幕边缘时，顶/底装饰（花花、建筑、气泡等）可能被裁掉。",
       rowDisableMiniMode: "关闭极简模式",
       rowDisableMiniModeDesc: "开启后桌宠不会进入极简模式，也不会播放边缘吸附的迷你动画。",
+
+      rowKickByWindow: "窗口踢毽子",
+
+      rowKickByWindowDesc: "用鼠标拖动其他应用的窗口撞击桌宠，会把它像毽子一样踢向空中；持续撞击可让它一直飞着。仅限 Windows。",
       rowFreeRoam: "自由漫步",
       rowFreeRoamDesc: "空闲时让桌宠在桌面上自由漫步，移动鼠标即停止。",
       rowRoamMovementStyle: "移动方式",
@@ -3353,6 +3361,10 @@
       rowAllowEdgePinningDesc: "開啟後桌寵貼齊螢幕邊緣時，頂部或底部裝飾（小花、建築、對話框等）可能會被切掉。",
       rowDisableMiniMode: "關閉極簡模式",
       rowDisableMiniModeDesc: "開啟後桌寵不會進入極簡模式，也不會播放邊緣吸附的迷你動畫。",
+
+      rowKickByWindow: "視窗踢毽子",
+
+      rowKickByWindowDesc: "用滑鼠拖曳其他應用程式的視窗撞擊桌寵，會把它像毽子一樣踢向空中；持續撞擊可讓它一直飛著。僅限 Windows。",
       rowFreeRoam: "自由漫步",
       rowFreeRoamDesc: "閒置時讓桌寵在桌面上自由漫步，移動滑鼠即停止。",
       rowRoamMovementStyle: "移動方式",
@@ -4565,6 +4577,10 @@
       rowAllowEdgePinningDesc: "화면 가장자리에 붙을 때 상/하단 장식(반짝임·건물·말풍선 등)이 잘릴 수 있습니다.",
       rowDisableMiniMode: "미니 모드 끄기",
       rowDisableMiniModeDesc: "켜면 가장자리 스냅이나 메뉴로 미니 모드에 들어가지 않습니다.",
+
+      rowKickByWindow: "Kick by dragged windows",
+
+      rowKickByWindowDesc: "Drag another app's window into Clawd to kick it up like a hacky sack. Keep hitting it to keep it in the air. Windows only.",
       rowFreeRoam: "자유 배회",
       rowFreeRoamDesc: "대기 중에 Clawd가 책상 위를 자유롭게 돌아다닙니다. 마우스를 움직이면 멈춥니다.",
       rowRoamMovementStyle: "이동 방식",
@@ -5777,6 +5793,10 @@
       rowAllowEdgePinningDesc: "上下の装飾 (キラキラ・建物・吹き出しなど) が画面端で見切れる可能性があります。",
       rowDisableMiniMode: "ミニモードを無効化",
       rowDisableMiniModeDesc: "オンにすると、端へのスナップやメニューからミニモードに入りません。",
+
+      rowKickByWindow: "Kick by dragged windows",
+
+      rowKickByWindowDesc: "Drag another app's window into Clawd to kick it up like a hacky sack. Keep hitting it to keep it in the air. Windows only.",
       rowFreeRoam: "自由散策",
       rowFreeRoamDesc: "待機中にClawdがデスク上を自由に歩き回ります。マウスを動かすと停止します。",
       rowRoamMovementStyle: "移動スタイル",
@@ -6987,6 +7007,10 @@
       rowAllowEdgePinningDesc: "Enfeites de cima e de baixo (brilhos, construções, balões, …) podem ser cortados pela borda da tela",
       rowDisableMiniMode: "Desativar o modo mini",
       rowDisableMiniModeDesc: "Impede o Clawd de entrar no modo mini pelo encaixe na borda ou pelo menu",
+
+      rowKickByWindow: "Kick by dragged windows",
+
+      rowKickByWindowDesc: "Drag another app's window into Clawd to kick it up like a hacky sack. Keep hitting it to keep it in the air. Windows only.",
       rowFreeRoam: "Passeio livre",
       rowFreeRoamDesc: "Deixa o Clawd passear livremente pela mesa quando está ocioso. O movimento para quando você mexe o mouse.",
       rowRoamMovementStyle: "Estilo de movimento",
@@ -8197,6 +8221,10 @@
       rowAllowEdgePinningDesc: "Las decoraciones de arriba/abajo (destellos, edificios, globos, …) pueden quedar recortadas por el borde de la pantalla",
       rowDisableMiniMode: "Desactivar Modo mini",
       rowDisableMiniModeDesc: "Evita que Clawd entre en Modo mini al ajustarse a un borde o desde el menú",
+
+      rowKickByWindow: "Kick by dragged windows",
+
+      rowKickByWindowDesc: "Drag another app's window into Clawd to kick it up like a hacky sack. Keep hitting it to keep it in the air. Windows only.",
       rowFreeRoam: "Deambular libre",
       rowFreeRoamDesc: "Deja que Clawd deambule libremente por el escritorio cuando está inactivo. El movimiento se detiene cuando mueves el ratón.",
       rowRoamMovementStyle: "Estilo de movimiento",

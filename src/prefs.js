@@ -356,6 +356,9 @@ const SCHEMA = {
   // #686: constrain roam movement to horizontal or vertical only (axis-aligned).
   // When enabled, each roam picks a random target that varies in only one axis.
   roamConstrainAxis: { type: "boolean", default: false },
+  // Windows-only. When ON, dragging another app's window into the pet kicks it
+  // upward like a hacky sack (src/kick.js + src/win-moving-window.js).
+  kickByWindow: { type: "boolean", default: false },
   // #562: Windows-only. When ON, the pet floats ON TOP of a foreground
   // fullscreen app (e.g. a borderless game) and stays draggable, instead of
   // standing down below it (#538). Default ON — most users want to glance at

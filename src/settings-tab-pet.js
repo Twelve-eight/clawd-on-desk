@@ -13,6 +13,7 @@
     "freeRoam",
     "roamConstrainAxis",
     "fullscreenAutoHide",
+    "kickByWindow",
   ]);
 
   let state = null;
@@ -470,6 +471,11 @@
         labelKey: "rowDisableMiniMode",
         descKey: "rowDisableMiniModeDesc",
       }),
+      ...(i18n && i18n.IS_WIN ? [helpers.buildSwitchRow({
+        key: "kickByWindow",
+        labelKey: "rowKickByWindow",
+        descKey: "rowKickByWindowDesc",
+      })] : []),
       ...(i18n && i18n.IS_WIN ? [helpers.buildSwitchRow({
         key: "fullscreenAutoHide",
         labelKey: "rowFullscreenAutoHide",
